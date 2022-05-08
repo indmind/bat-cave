@@ -31,9 +31,21 @@ class Ball extends CircleComponent with HasGameRef, CollisionCallbacks {
 
   @override
   void update(double dt) {
-    // move position up and down with sin of gameRef.currentTime()
-    yvel = sin(gameRef.currentTime() * 5) * 50;
-    position.y += yvel * dt;
+    yvel += 15;
+    yvel *= 0.98;
+    position += Vector2(0, yvel * dt);
+
+    //stop in ground
+    if (position.y > gameRef.size.y - radius) {
+      position.y = gameRef.size.y - radius;
+      yvel = 0;
+    }
+
+    //top in ceiling
+    if (position.y < radius) {
+      position.y = radius;
+      yvel = 0;
+    }
 
     // add distance traveled
     distanceTraveled += 0.5 * dt;
@@ -41,6 +53,7 @@ class Ball extends CircleComponent with HasGameRef, CollisionCallbacks {
   }
 
   void follow(Vector2 target, double dt) {
+    return;
     // position.moveToTarget(target..x = position.x, 50 * dt);
     final yDist = (target.y - position.y).abs();
 
@@ -92,5 +105,11 @@ class Ball extends CircleComponent with HasGameRef, CollisionCallbacks {
     }
 
     super.onCollision(intersectionPoints, other);
+  }
+
+  void jump() {
+    yvel += -800;
+
+    yvel = yvel.clamp(-400, yvel.abs());
   }
 }

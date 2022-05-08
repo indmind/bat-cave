@@ -75,7 +75,7 @@ void main() {
 }
 
 class MyGame extends FlameGame
-    with HasCollisionDetection, FPSCounter, VerticalDragDetector {
+    with HasCollisionDetection, FPSCounter, VerticalDragDetector, TapDetector {
   final _ball = Ball(20, Paint()..color = Colors.transparent);
   // ..debugMode = true;
 
@@ -195,6 +195,13 @@ class MyGame extends FlameGame
   //   //   );
   //   // }
   // }
+
+  @override
+  void onTap() {
+    super.onTap();
+
+    _ball.jump();
+  }
 
   @override
   void onVerticalDragUpdate(DragUpdateInfo info) {
